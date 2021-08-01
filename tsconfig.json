@@ -1,0 +1,14 @@
+{
+  "extends": "./node_modules/@suprcrew/project-config/configs/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./build"
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules/*",
+    "tests/**/*.ts",
+    "build/*"
+  ]
+}

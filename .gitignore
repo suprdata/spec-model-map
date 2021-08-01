@@ -1,0 +1,6 @@
+.idea
+.DS_STORE
+node_modules/
+var/
+test-report.xml
+build

@@ -1,0 +1,29 @@
+{
+  "name": "@suprdata/thing-map",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "./node_modules/eslint/bin/eslint.js --color './src/**/*.ts'",
+    "test:run": "./node_modules/jest/bin/jest.js tests",
+    "test:watch": "./node_modules/jest/bin/jest.js tests --watch",
+    "test:coverage": "./node_modules/jest/bin/jest.js tests --coverage",
+    "test:watch:coverage": "./node_modules/jest/bin/jest.js tests --watch --coverage",
+    "test": "npm run lint; npm run test:run",
+    "build": "rm -rf ./build && npm run lint && npm run test && ./node_modules/typescript/bin/tsc",
+    "release": "npm run build && npx standard-version && git push --follow-tags origin master && npm publish --access public"
+  },
+  "dependencies": {
+    "@suprcrew/project-config": "latest"
+  },
+  "author": "",
+  "license": "MIT",
+  "files": [
+    "build",
+    "README.md"
+  ],
+  "devDependencies": {
+    "standard-version": "^9.3.1",
+    "typescript": "^4.3.5"
+  }
+}
