@@ -19,21 +19,18 @@ export const defaultNamingStrategy = (valueSpec: SpecificationCharacteristicValu
 export function mapThing<T extends Record<string, unknown>>(namingStrategy: MapKeyNamingStrategy = defaultNamingStrategy): MapSourceToTargetFunction<Thing, T> {
   return (thing: Thing): T => {
     const source = thing.characteristicValueUse || [];
-    const target: Record<string, unknown> = {
-      id: thing['@id'],
-      name: thing.name,
-    };
+    // const target: Record<string, unknown> = ;
 
     const specValueUseIndex: { [key: string]: SpecificationCharacteristicValueUse } = indexSpecificationValueUse(thing?.specification);
 
-    source.forEach((value: CharacteristicValueUse) => {
+    return source.reduce<Record<string, unknown>>((target, value: CharacteristicValueUse) => {
       const {commonCharValues, commonSpecCharValueUse} = value;
       const valueSpec = specValueUseIndex[commonSpecCharValueUse['@id']];
       if (!valueSpec) {
-        return;
+        return target;
       }
       if (!valueSpec?.specificationCharacteristicValue?.visible) {
-        return;
+        return target;
       }
 
       const targetValue = commonCharValues.map((val: CharacteristicValue) => {
@@ -48,9 +45,13 @@ export function mapThing<T extends Record<string, unknown>>(namingStrategy: MapK
       });
 
       target[defaultNamingStrategy(valueSpec)] = valueByCardinality(valueSpec)(targetValue);
-    });
+      return target;
+    }, {
+      id: thing['@id'],
+      name: thing.name,
+    } as Record<string, unknown>) as unknown as T;
 
-    return target as T;
+    // return target as T;
   };
 }
 
@@ -64,7 +65,7 @@ const valueByCardinality = (valueSpec: SpecificationCharacteristicValueUse) => (
   }
 }
 
-function indexSpecificationValueUse(spec: Specification): {[key: string]: SpecificationCharacteristicValueUse} {
+function indexSpecificationValueUse(spec: Specification): { [key: string]: SpecificationCharacteristicValueUse } {
   const specValueUse: SpecificationCharacteristicValueUse[] = spec?.specificationCharacteristicValueUse || [];
   const specValueUseIndex: { [key: string]: SpecificationCharacteristicValueUse } = {};
   specValueUse.forEach((valueUse: SpecificationCharacteristicValueUse) => {
@@ -77,12 +78,8 @@ function indexSpecificationValueUse(spec: Specification): {[key: string]: Specif
 export function mapEntityToThing<T extends Record<string, unknown>>(spec: Specification, namingStrategy: MapKeyNamingStrategy): MapSourceToTargetFunction<T, Thing> {
   return (structure: T): Thing => {
     const target: Thing = mapObject<Thing>({
-      '@id': (input: T) => {
-        return input['id'] as string;
-      },
-      'name': (input: T) => {
-        return input['name'] as string;
-      },
+      '@id': 'id',
+      'name': 'name',
       specification: () => spec,
       characteristicValueUse: () => [],
     }, structure as unknown as object);
@@ -99,8 +96,8 @@ export function mapEntityToThing<T extends Record<string, unknown>>(spec: Specif
       const correspondingValueSpec: SpecificationCharacteristicValueUse = specValueUseIndex[correspondingValueSpecId];
 
       // ignore unknown spec
-      if(correspondingValueSpec === undefined) {
-        return ;
+      if (correspondingValueSpec === undefined) {
+        return;
       }
 
       const correspondingValue = structure[key];
@@ -127,7 +124,7 @@ export function mapEntityToThing<T extends Record<string, unknown>>(spec: Specif
 
       target.characteristicValueUse.push(composeCharValue(correspondingValueSpec, correspondingValue));
 
-      return ;
+      return;
     })
 
     return target;
