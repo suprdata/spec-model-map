@@ -14,7 +14,9 @@
     "release": "npm run build && npx standard-version && git push --follow-tags origin master && npm publish --access public"
   },
   "dependencies": {
-    "@suprcrew/project-config": "latest"
+    "@suprcrew/project-config": "latest",
+    "@suprcrew/super-map": "^0.0.2",
+    "@suprdata/spec": "^0.2.3"
   },
   "author": "",
   "license": "MIT",

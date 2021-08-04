@@ -1,7 +1,8 @@
 {
   "extends": "./node_modules/@suprcrew/project-config/configs/tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./build"
+    "outDir": "./build",
+    "strictNullChecks": false
   },
   "include": [
     "src/**/*.ts"
