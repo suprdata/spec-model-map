@@ -118,8 +118,6 @@ describe('thing-map', () => {
 
     expect(target['@id']).toEqual(athlete['@id']);
     expect(target.name).toEqual(athlete.name);
-    expect(target.characteristicValueUse[0]).toMatchObject(athlete.characteristicValueUse[2]);
-    expect(target.characteristicValueUse[1]).toMatchObject(athlete.characteristicValueUse[1]);
-    expect(target.characteristicValueUse[2]).toMatchObject(athlete.characteristicValueUse[0]);
+    expect(target.characteristicValueUse).toMatchObject(athlete.characteristicValueUse);
   });
 });

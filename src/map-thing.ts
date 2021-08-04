@@ -85,14 +85,9 @@ export function mapEntityToThing<T extends Record<string, unknown>>(spec: Specif
     }, structure as unknown as object);
 
     const specValueUseIndex: { [key: string]: SpecificationCharacteristicValueUse } = indexSpecificationValueUse(spec);
-    const specValueUseNameToIdIndex: { [key: string]: string } = {};
 
     Object.keys(specValueUseIndex).forEach((key) => {
-      specValueUseNameToIdIndex[String(namingStrategy(specValueUseIndex[key]))] = key;
-    });
-
-    Object.keys(structure).forEach((key) => {
-      const correspondingValueSpecId = specValueUseNameToIdIndex[key];
+      const correspondingValueSpecId = key;
       const correspondingValueSpec: SpecificationCharacteristicValueUse = specValueUseIndex[correspondingValueSpecId];
 
       // ignore unknown spec
@@ -100,7 +95,7 @@ export function mapEntityToThing<T extends Record<string, unknown>>(spec: Specif
         return;
       }
 
-      const correspondingValue = structure[key];
+      const correspondingValue = structure[specValueUseIndex[key].name];
 
       const composeCharValue = (specCharValUse: SpecificationCharacteristicValueUse, val: any) => {
         const min = Number((specCharValUse || {minCardinality: 0})?.minCardinality);
