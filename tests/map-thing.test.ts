@@ -1,13 +1,13 @@
-import {Thing} from '@suprdata/spec/dist/lib/Thing';
-import {model, typed} from '@suprdata/spec/dist/lib/helpers/model';
-import {Specification} from '@suprdata/spec/dist/lib/Specification';
+import { Thing } from '@suprdata/spec/dist/lib/Thing';
+import { model, typed } from '@suprdata/spec/dist/lib/helpers/model';
+import { Specification } from '@suprdata/spec/dist/lib/Specification';
 import {
   referenceSpecCharValue,
   specCharValueCardinalityDecorator,
-  stringSpecCharValue
+  stringSpecCharValue,
 } from '@suprdata/spec/dist/lib/helpers/specCharValueUse';
-import {referenceCharValueUse, simpleCharValueUse} from '@suprdata/spec/dist/lib/helpers/charValueUse';
-import {defaultNamingStrategy, mapEntityToThing, mapThing} from '../src/map-thing';
+import { referenceCharValueUse, simpleCharValueUse } from '@suprdata/spec/dist/lib/helpers/charValueUse';
+import { defaultNamingStrategy, mapEntityToThing, mapThing } from '../src/map-thing';
 
 const personType = typed<Specification>(('Common/Person'), {
   '@context': 'Common',
@@ -27,11 +27,11 @@ const sportsTeamSpec: Specification = personType({
       stringSpecCharValue('SportsTeam/Athlete/stadium', 'stadium'),
       {
         minCardinality: 0,
-        maxCardinality: 1
-      }
+        maxCardinality: 1,
+      },
     ),
     stringSpecCharValue('SportsTeam/Athlete/awards', 'awards'),
-  ]
+  ],
 });
 
 const playerSpec: Specification = personType({
@@ -42,28 +42,28 @@ const playerSpec: Specification = personType({
       stringSpecCharValue('SportsTeam/Athlete/age', 'age'),
       {
         minCardinality: 0,
-        maxCardinality: 1
-      }
+        maxCardinality: 1,
+      },
     ),
     specCharValueCardinalityDecorator(
       referenceSpecCharValue('SportsTeam', 'team', sportsTeamSpec),
       {
         minCardinality: 0,
-        maxCardinality: 1
-      }
+        maxCardinality: 1,
+      },
     ),
-    referenceSpecCharValue('SportsTeam/Coach', 'coach', coachSpec)
-  ]
+    referenceSpecCharValue('SportsTeam/Coach', 'coach', coachSpec),
+  ],
 });
 
 const baseAthelete = model<Thing>({
-  specification: playerSpec
+  specification: playerSpec,
 });
 const baseCoach = model<Thing>({
-  specification: coachSpec
+  specification: coachSpec,
 });
 const baseSportsTeam = model<Thing>({
-  specification: sportsTeamSpec
+  specification: sportsTeamSpec,
 });
 
 const athlete: Thing = baseAthelete({
@@ -79,13 +79,13 @@ const athlete: Thing = baseAthelete({
         characteristicValueUse: [
           simpleCharValueUse('SportsTeam/Athlete/stadium', ['Tottenham Hotspur Stadium']),
           simpleCharValueUse('SportsTeam/Athlete/awards', ['A', 'B', 'C']),
-        ]
-      })
+        ],
+      }),
     ]),
     referenceCharValueUse('SportsTeam/Coach', [
-      baseCoach({'@id': 'santo', name: 'Espirito Santo'}),
-    ])
-  ]
+      baseCoach({ '@id': 'santo', name: 'Espirito Santo' }),
+    ]),
+  ],
 });
 
 const genericEntity = {
@@ -94,17 +94,17 @@ const genericEntity = {
   coach: [
     {
       id: 'santo',
-      name: 'Espirito Santo'
-    }
+      name: 'Espirito Santo',
+    },
   ],
   team: {
     id: 'tottenham',
     name: 'Tottenham Hotspur',
     stadium: 'Tottenham Hotspur Stadium',
-    awards: ['A', 'B', 'C']
+    awards: ['A', 'B', 'C'],
   },
-  age: '28'
-}
+  age: '28',
+};
 
 describe('thing-map', () => {
   test('should map a complex thing into an multilevel model', () => {
